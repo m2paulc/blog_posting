@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const exphbs = require("express-handlebars");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -13,6 +14,7 @@ require("./models/User")
 require("./config/passport")(passport);
 
 // Load Routes
+const index = require("./routes/index");
 const auth = require("./routes/auth");
 
 // Load keys
@@ -25,9 +27,11 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 
-app.get('/', (req, res) => {
-    res.send('Index Route Established');
-});
+//handlebars middleware
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
 
 //cookie parser middleware
 app.use(cookieParser());
@@ -49,6 +53,7 @@ app.use((req, res, next) => {
 });
 
 //Use Routes
+app.use('/', index);
 app.use('/auth', auth);
 
 const port = process.env.PORT || 5000;

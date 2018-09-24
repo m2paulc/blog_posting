@@ -2,14 +2,16 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const exphbs = require("express-handlebars");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const app = express();
 
-//Load user model
-require("./models/User")
+//Load models
+require("./models/User");
+require("./models/Blog");
 
 //Load passport config
 require("./config/passport")(passport);
@@ -28,6 +30,11 @@ mongoose.Promise = global.Promise;
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
+    
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
 //handlebars middleware
 app.engine('handlebars', exphbs({

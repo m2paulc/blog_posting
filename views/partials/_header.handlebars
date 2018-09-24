@@ -1,0 +1,44 @@
+<nav class="grey darken-3">
+    <div class="container">
+        <div class="nav-wrapper">
+            <a href="/blogs" class="brand-logo center">Blogs</a>
+            <a href="#" data-target="slide-out" class="sidenav-trigger button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+            <ul class="right hide-on-small-only">
+                {{#if user}}
+                    <li><a href="/dashboard">Welcome {{user.firstName}}</a></li>
+                    <li><a href="/auth/logout"><i class="fa fa-sign-out-alt" aria-hidden="true"></i></a></li>
+                {{else}}
+                   <li><a href="/blogs"><i class="fa fa-book"></i> All Blogs</a></li>
+                {{/if}}
+            </ul>
+            <!-- side nav -->
+            <ul class="sidenav" id="slide-out">
+                {{#if user}}
+                    <li>
+                        <div class="user-view">
+                            <div class="background">
+                              <img src="images/office.jpg">
+                            </div>
+                            <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
+                            <a href="#name"><span class="white-text name">John Doe</span></a>
+                            <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+                        </div>
+                    </li>
+                {{else}}
+                    <li>
+                        <a class="btn red darken-1" href="/auth/google"><i class="fab fa-google left"></i> Login with Google</a>    
+                    </li>
+                {{/if}}
+                <li>
+                    <a href="/blogs"><i class="fa fa-book"></i> All Blogs</a>
+                </li>
+                <li class="divider"></li>
+                {{#if user}}
+                <li><a href="/dashboard"><i class="fa fa-cog"></i>Dashboard</a></li>
+                <li><a href="/blogs/my"><i class="fa fa-user"></i>My Blogs</a></li>
+                <li><a href="/auth/logout"><i class="fa fa-sign-out-alt" aria-hidden="true"></i>Logout</a></li>
+                {{/if}}
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,6 +1,9 @@
 <div class="row">
     <div class="col s12 m9">
-        <h3>{{blog.title}}</h3>
+        <h3>
+            {{blog.title}}
+            <small>{{{editIcon blog.user.id user.id blog.id false}}}</small>
+        </h3>
         <div class="card blog">
             <div class="card-content">
                 <span class="card-title">{{formatDate blog.date 'MMMM Do YYYY'}}</span>

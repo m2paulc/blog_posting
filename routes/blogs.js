@@ -58,7 +58,7 @@ router.get('/edit/:id', ensureAuthenticated, (req, res) => {
         _id: req.params.id
     })
     .then(blog => {
-        res.render('blogs/edit', {blog: blog});
+        (blog.user != req.user.id) ? res.redirect('/blogs') : res.render('blogs/edit', {blog: blog});
     });
 });
 

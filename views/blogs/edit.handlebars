@@ -1,1 +1,43 @@
-<h1>Edit Blogs</h1>
+<h1>Edit Blog</h1>
+<div class="row">
+    <form action="/blogs/{{blog.id}}?_method=PUT" method="POST" class="col s12">
+        <input type="hidden" name="_method" value="PUT"></input>
+        <div class="row">
+            <div class="input-field">
+                <input type="text" name="title" value="{{blog.title}}"></input>
+                <label for="title">Title</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12 m6">
+                <select name="status">
+                    {{#select blog.status}}
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="public" selected>Public</option>
+                    <option value="private">Private</option>
+                    <option value="unpublished">Unpublished</option>
+                    {{/select}}
+                </select>
+                <label for="status">Status</label>
+            </div>
+        </div>
+        
+        <div class="row">
+            <p>
+                <label>
+                    <input type="checkbox" name="allowComments" class="filled-in" id="filled-in-box" 
+                    {{#if blog.allowComments}}checked="checked"{{/if}}></input>
+                    <span>Allow Comments</span>
+                </label>
+            </p>
+        </div>
+        
+        <div class="row">
+            <div class="input-field">
+                <h5>Tell us Your Story</h5>
+                <textarea type="text" name="body">{{blog.body}}</textarea>
+            </div>
+        </div>
+        <input type="submit" value="Save" class="btn"></input>
+    </form>
+</div>

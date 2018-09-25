@@ -24,10 +24,42 @@ router.get('/show/:id', (req, res) => {
     });
 });
 
-//add blogs
+//add a blog
 router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('blogs/add');
 });
+
+//edit a blog
+router.get('/edit/:id', ensureAuthenticated, (req, res) => {
+    Blog.findOne({
+        _id: req.params.id
+    })
+    .then(blog => {
+        res.render('blogs/edit', {blog: blog});
+    });
+});
+
+//save edited blog PUT Route
+router.put('/:id', (req, res) => {
+    Blog.findOne({
+        _id: req.params.id
+    })
+    .then(blog => {
+        let allowComments;
+        (req.body.allowComments ? allowComments = true : allowComments = false);
+        
+        //new values
+        blog.title = req.body.title;
+        blog.body = req.body.body;
+        blog.status = req.body.status;
+        blog.allowComments = allowComments;
+        blog.save()
+            .then(blog => {
+               res.redirect('/dashboard'); 
+            });
+    });
+});
+
 
 //process add blog
 router.post('/', (req, res) => {

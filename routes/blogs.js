@@ -8,6 +8,7 @@ const {ensureAuthenticated, ensureGuest} = require("../helpers/auth");
 router.get('/', (req, res) => {
     Blog.find({status: 'public'})
         .populate('user')
+        .sort({date: 'desc'})
         .then(blogs => {
             res.render('blogs/index', {blogs: blogs});
         });
@@ -19,6 +20,7 @@ router.get('/show/:id', (req, res) => {
         _id: req.params.id
     })
     .populate('user')
+    .populate('comments.commentUser')
     .then(blog => {
         res.render('blogs/show', {blog: blog});
     });
@@ -87,6 +89,25 @@ router.delete('/:id', (req, res) => {
         .then(() => {
             res.redirect('/dashboard');
         });
+});
+
+//add comment Route
+router.post('/comment/:id', (req, res) => {
+    Blog.findOne({
+        _id: req.params.id
+    })
+    .then(blog => {
+        const newComment = {
+            commentBody: req.body.commentBody,
+            commentUser: req.user.id
+        }
+        //add in the beginning (unshift) into an array
+        blog.comments.unshift(newComment);
+        blog.save()
+            .then(blog => {
+                res.redirect(`/blogs/show/${blog.id}`);
+            });
+    });
 });
 
 module.exports = router;

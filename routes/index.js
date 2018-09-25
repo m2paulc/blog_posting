@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+const Blogs = mongoose.model("blogs");
 const {ensureAuthenticated, ensureGuest} = require("../helpers/auth");
 
 router.get('/', ensureGuest, (req, res) => {
@@ -7,7 +9,10 @@ router.get('/', ensureGuest, (req, res) => {
 });
 
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('index/dashboard');
+    Blogs.find({user: req.user.id})
+        .then(blogs => {
+            res.render('index/dashboard', {blogs: blogs});
+        });
 });
 
 router.get('/about', (req, res) => {

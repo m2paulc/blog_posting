@@ -29,6 +29,27 @@ router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('blogs/add');
 });
 
+//process add blog
+router.post('/', (req, res) => {
+    let allowComments;
+    
+    (req.body.allowComments ? allowComments = true : allowComments = false);
+    
+    const newBlog = {
+        title: req.body.title,
+        body: req.body.body,
+        status: req.body.status,
+        allowComments: allowComments,
+        user: req.user.id
+    }
+    //create blog
+    new Blog(newBlog)
+        .save()
+        .then(blog => {
+            res.redirect(`/blogs/show/${blog.id}`);
+        });
+});
+
 //edit a blog
 router.get('/edit/:id', ensureAuthenticated, (req, res) => {
     Blog.findOne({
@@ -60,25 +81,11 @@ router.put('/:id', (req, res) => {
     });
 });
 
-
-//process add blog
-router.post('/', (req, res) => {
-    let allowComments;
-    
-    (req.body.allowComments ? allowComments = true : allowComments = false);
-    
-    const newBlog = {
-        title: req.body.title,
-        body: req.body.body,
-        status: req.body.status,
-        allowComments: allowComments,
-        user: req.user.id
-    }
-    //create blog
-    new Blog(newBlog)
-        .save()
-        .then(blog => {
-            res.redirect(`/blogs/show/${blog.id}`);
+//delete a blog Route
+router.delete('/:id', (req, res) => {
+    Blog.deleteOne({_id: req.params.id})
+        .then(() => {
+            res.redirect('/dashboard');
         });
 });
 

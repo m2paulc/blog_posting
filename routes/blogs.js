@@ -11,9 +11,20 @@ router.get('/', (req, res) => {
         .then(blogs => {
             res.render('blogs/index', {blogs: blogs});
         });
-    
 });
 
+//show single blog
+router.get('/show/:id', (req, res) => {
+    Blog.findOne({
+        _id: req.params.id
+    })
+    .populate('user')
+    .then(blog => {
+        res.render('blogs/show', {blog: blog});
+    });
+});
+
+//add blogs
 router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('blogs/add');
 });
@@ -35,7 +46,7 @@ router.post('/', (req, res) => {
     new Blog(newBlog)
         .save()
         .then(blog => {
-            res.redirect(`/blogs/show${blog.id}`);
+            res.redirect(`/blogs/show/${blog.id}`);
         });
 });
 
